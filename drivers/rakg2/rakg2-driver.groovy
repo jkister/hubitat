@@ -15,11 +15,11 @@ import groovy.transform.Field
 import groovy.json.JsonOutput
 
 def version() {
-    return "1.2.8.1"
+    return "1.2.9"
 }
 
 metadata {
-    definition (name: "Ring Alarm Keypad G2 Community", namespace: "jkister", author: "Community") {
+    definition (name: "Ring Alarm Keypad G2 Community", namespace: "jkister", author: "Community", importUrl: "https://raw.githubusercontent.com/jkister/hubitat/master/drivers/rakg2/rakg2-driver.groovy") {
         capability "Actuator"
         capability "Sensor"
         capability "Configuration"
@@ -101,6 +101,10 @@ metadata {
         0x0B: [securityKeypadState: "armed away", hsmCmd: "armAway"]
 ]
 @Field static Map CMD_CLASS_VERS=[0x86:2, 0x70:1, 0x20:1, 0x86:3]
+
+void debug(string){
+    if (logEnable) log.debug "${string}"
+}
 
 void logsOff(){
     log.warn "debug logging disabled..."
@@ -188,6 +192,10 @@ void armNight(delay) {
         if (delay > 0 ) {
             exitDelay(delay)
             runIn(delay, armNightEnd)
+        } else if ( delay == null ){
+            // delay is null - event received from device page?  let HSM/whatever pick it up
+            debug "armNight: sending emulated event" 
+            sendEvent(name:"armingIn", value: state.keypadConfig.armNightDelay, data:[armMode: armingStates[0x00].securityKeypadState, armCmd: armingStates[0x00].hsmCmd], isStateChange:true)
         } else {
             armNightEnd()
         }
@@ -201,11 +209,11 @@ void armNightEnd() {
     if (!state.type) { state.type = "physical" }
     def sk = device.currentValue("securityKeypad")
     if(sk != "armed night") {
-        //keypadUpdateStatus(0x00, state.type, state.code)
+        keypadUpdateStatus(0x00, state.type, state.code)
 
         Date now = new Date()
         long ems = now.getTime()
-        sendEvent(name:"armingIn", value: state.keypadConfig.armNightDelay, data:[armMode: armingStates[0x0B].securityKeypadState, armCmd: armingStates[0x0B].hsmCmd], isStateChange:true)
+        sendEvent(name:"armingIn", value: state.keypadConfig.armNightDelay, data:[armMode: armingStates[0x00].securityKeypadState, armCmd: armingStates[0x00].hsmCmd], isStateChange:true)
         sendEvent(name:"alarmStatusChangeTime", value: "${now}", isStateChange:true)
         sendEvent(name:"alarmStatusChangeEpochms", value: "${ems}", isStateChange:true)
     }
@@ -218,7 +226,11 @@ void armAway(delay) {
         if (delay > 0 ) {
             exitDelay(delay)
             runIn(delay, armAwayEnd)
-        } else {
+        } else if( delay == null ){
+            // delay is null - event received from device page?  let HSM/whatever pick it up
+            debug "armAway: sending emulated event" 
+            sendEvent(name:"armingIn", value: state.keypadConfig.armAwayDelay, data:[armMode: armingStates[0x0B].securityKeypadState, armCmd: armingStates[0x0B].hsmCmd], isStateChange:true)
+        }else{
             armAwayEnd()
         }
     } else {
@@ -249,7 +261,11 @@ void armHome(delay) {
         if (delay > 0) {
             exitDelay(delay)
             runIn(delay, armHomeEnd)
-        } else {
+        } else if( delay == null ){
+            // delay is null - event received from device page?  let HSM/whatever pick it up
+            debug "armHome: sending emulated event" 
+            sendEvent(name:"armingIn", value: state.keypadConfig.armHomeDelay, data:[armMode: armingStates[0x0A].securityKeypadState, armCmd: armingStates[0x0A].hsmCmd], isStateChange:true)
+        }else{
             armHomeEnd()
         }
     } else {
@@ -277,12 +293,7 @@ void disarm(delay) {
     if (logEnable) log.debug "In disarm (${version()}) - delay: ${delay}"
     def sk = device.currentValue("securityKeypad")
     if(sk != "disarmed") {
-        if (delay > 0 ) {
-            exitDelay(delay)
-            runIn(delay, disarmEnd)
-        } else {
-            disarmEnd()
-        }
+        disarmEnd()
     } else {
         if (logEnable) log.debug "In disarm - securityKeypad already set to 'disarmed', so skipping."
     }
@@ -306,6 +317,8 @@ void disarmEnd() {
         unschedule(armAwayEnd)
         unschedule(armNightEnd)
         unschedule(changeStatus)
+    } else {
+        if (logEnable) log.debug "In disarm - securityKeypad already set to 'disarmed', so skipping."
     }
 }
 
