@@ -78,6 +78,10 @@ metadata {
         ], defaultValue: "Tone_1", description: ""
         input name: "instantArming", type: "bool", title: "Enable set alarm without code", defaultValue: false, description: "" 
         input name: "validateCheck", type: "bool", title: "Validate codes submitted with checkmark", defaultValue: false, description: ""
+        input name: "partialFunctionValue", type: "enum", title: "Home Button Action", options: [
+            ["armHome":"Arm Home (default)"],
+            ["armNight":"Arm Night"],
+        ], defaultValue: "armHome", description: "After setting this, press \"Save Preferences\" below then press the \"Set Partial Function\" button above"
         input name: "proximitySensor", type: "bool", title: "Disable the Proximity Sensor", defaultValue: false, description: ""
         input name: "optEncrypt", type: "bool", title: "Enable lockCode encryption", defaultValue: false, description: ""
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
@@ -177,7 +181,11 @@ void pollDeviceData() {
 }
 
 void keypadUpdateStatus(Integer status,String type="digital", String code) {
-    sendToDevice(zwave.indicatorV3.indicatorSet(indicatorCount:1, value: 0, indicatorValues:[[indicatorId:status, propertyId:2, value:0xFF]]).format())
+    // put keypad into Home mode when system is in Night mode
+    int kpstatus = status
+    if (kpstatus == 0x00) kpstatus = 0x0A
+
+    sendToDevice(zwave.indicatorV3.indicatorSet(indicatorCount:1, value: 0, indicatorValues:[[indicatorId:kpstatus, propertyId:2, value:0xFF]]).format())
     state.keypadStatus = status
     if (state.code != "") { type = "physical" }
     eventProcess(name: "securityKeypad", value: armingStates[status].securityKeypadState, type: type, data: state.code)
@@ -384,7 +392,11 @@ void setCodeLength(pincodelength) {
 }
 
 void setPartialFunction(mode = null) {
-    if (logEnable) log.debug "In setPartialFucntion (${version()}) - mode: ${mode}"
+    if (logEnable) log.debug "In setPartialFunction (${version()}) - mode: ${mode}"
+    if (!mode) {
+        mode = partialFunctionValue
+        if (logEnable) log.debug "In setPartialFunction (${version()}) - set mode from preferences: ${mode}"
+    }
     if ( !(mode in ["armHome","armNight"]) ) {
         if (txtEnable) log.warn "custom command used by HSM"
     } else if (mode in ["armHome","armNight"]) {
