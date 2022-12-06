@@ -514,6 +514,7 @@ void parseEntryControl(Short command, List<Short> commandBytes) {
                         sendToDevice(zwave.indicatorV3.indicatorSet(indicatorCount:1, value: 0, indicatorValues:[[indicatorId:0x09, propertyId:2, value:0xFF]]).format())
                     }
                 } else {
+                    sendEvent(name:"validCode", value: "false", isStateChange: true)
                     sendEvent(name:"lastCodeName", value: "${code}", isStateChange:true)
                     sendEvent(name:"lastCodeTime", value: "${now}", isStateChange:true)
                     sendEvent(name:"lastCodeEpochms", value: "${ems}", isStateChange:true)
@@ -523,6 +524,7 @@ void parseEntryControl(Short command, List<Short> commandBytes) {
                 state.type="physical"
                 Date now = new Date()
                 long ems = now.getTime()
+                sendEvent(name:"validCode", value: "false", isStateChange: true)
                 sendEvent(name:"lastCodeName", value: "police", isStateChange:true)
                 sendEvent(name:"lastCodeTime", value: "${now}", isStateChange:true)
                 sendEvent(name:"lastCodeEpochms", value: "${ems}", isStateChange:true)
@@ -532,6 +534,7 @@ void parseEntryControl(Short command, List<Short> commandBytes) {
                 state.type="physical"
                 Date now = new Date()
                 long ems = now.getTime()
+                sendEvent(name:"validCode", value: "false", isStateChange: true)
                 sendEvent(name:"lastCodeName", value: "fire", isStateChange:true)
                 sendEvent(name:"lastCodeTime", value: "${now}", isStateChange:true)
                 sendEvent(name:"lastCodeEpochms", value: "${ems}", isStateChange:true)
@@ -541,6 +544,7 @@ void parseEntryControl(Short command, List<Short> commandBytes) {
                 state.type="physical"
                 Date now = new Date()
                 long ems = now.getTime()
+                sendEvent(name:"validCode", value: "false", isStateChange: true)
                 sendEvent(name:"lastCodeName", value: "medical", isStateChange:true)
                 sendEvent(name:"lastCodeTime", value: "${now}", isStateChange:true)
                 sendEvent(name:"lastCodeEpochms", value: "${ems}", isStateChange:true)
