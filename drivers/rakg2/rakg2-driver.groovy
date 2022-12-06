@@ -82,7 +82,7 @@ metadata {
             ["armHome":"Arm Home (default)"],
             ["armNight":"Arm Night"],
         ], defaultValue: "armHome", description: "After setting this, press \"Save Preferences\" below then press the \"Set Partial Function\" button above"
-        input name: "proximitySensor", type: "bool", title: "Disable the Proximity Sensor", defaultValue: false, description: ""
+        input name: "disableProximitySensor", type: "bool", title: "Disable the Proximity Sensor", defaultValue: false, description: ""
         input name: "optEncrypt", type: "bool", title: "Enable lockCode encryption", defaultValue: false, description: ""
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
         input name: "txtEnable", type: "bool", title: "Enable descriptionText logging", defaultValue: true
@@ -952,7 +952,7 @@ List<String> commands(List<String> cmds, Long delay=300) {
 }
 
 void proximitySensorHandler() {
-    if(proximitySensor) {
+    if(disableProximitySensor) {
         if (logEnable) log.debug "Turning the Proximity Sensor OFF"
         sendToDevice(new hubitat.zwave.commands.configurationv1.ConfigurationSet(parameterNumber: 15, size: 1, scaledConfigurationValue: 0).format())
     } else {
