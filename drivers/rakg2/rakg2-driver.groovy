@@ -7,6 +7,7 @@
     Special Thanks to Bryan Copeland (@bcopeland) for writing and releasing this code to the community!
     And Bryan Turcotte (@bptworld) for years of code and support.
 
+    See the community thread for more information: https://community.hubitat.com/t/107035
     For the commit history, see: https://github.com/jkister/hubitat/commits/master/drivers/rakg2
 
 */
@@ -15,7 +16,7 @@ import groovy.transform.Field
 import groovy.json.JsonOutput
 
 def version() {
-    return "1.2.10.1"
+    return "1.2.11"
 }
 
 metadata {

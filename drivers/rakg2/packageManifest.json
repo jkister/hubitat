@@ -2,10 +2,10 @@
 	"packageName": "Ring Alarm Keypad G2 Community Driver",
 	"minimumHEVersion": "2.1.9",
 	"author": "jkister",
-	"dateReleased": "2022-12-06",
+	"dateReleased": "2022-12-08",
 	"documentationLink": "https://github.com/jkister/hubitat",
 	"communityLink": "",
-	"releaseNotes": "All release notes can be found within the Community Link",
+	"releaseNotes": "See the community thread at https://community.hubitat.com/t/107035",
 	"apps" : [
 	],
 	"drivers" : [
@@ -15,7 +15,7 @@
 			"namespace": "jkister",
 			"location": "https://raw.githubusercontent.com/jkister/hubitat/master/drivers/rakg2/rakg2-driver.groovy",
 			"required": true,
-			"version": "1.2.10.1"
+			"version": "1.2.11"
 		}
 	]
 }
