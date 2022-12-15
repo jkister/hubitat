@@ -16,7 +16,7 @@ import groovy.transform.Field
 import groovy.json.JsonOutput
 
 def version() {
-    return "1.2.11"
+    return "1.2.12-alpha.0"
 }
 
 metadata {
