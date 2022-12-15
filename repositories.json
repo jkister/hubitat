@@ -1,13 +1,19 @@
 {
     "author": "Jeremy Kister (@jkister)",
     "gitHubUrl": "https://github.com/jkister/hubitat",
+    "payPalUrl": "bitcoincash:qpplt7d4can9w39tjyjx7zglq6ge23pq757utldwmf",
     "packages": [
         {
             "name": "Ring Alarm Keypad G2 Community Driver",
             "category": "Security",
             "location": "https://raw.githubusercontent.com/jkister/hubitat/master/drivers/rakg2/packageManifest.json",
             "description": "Make the Ring Keypad Gen2 do more!",
-            "tags": [ "Alarm Systems", "Monitoring", "Safety & Security", "Tools & Utilities" ]
+            "tags": [ "ZWave",
+                      "Alarm Systems",
+                      "Monitoring",
+                      "Safety & Security",
+                      "Tools & Utilities"
+                    ]
         }
     ]
 }
