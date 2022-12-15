@@ -12,16 +12,16 @@ For manual install, use Drivers -> New Driver -> Import Code<br>
 <br>
 <b>Tips & Tricks</b>:<br>
 * Keypad supports several tones that can be played via custom rule in RM
- * Create New Action -> 
- * Set Variable, Mode or File, Run Custom Action -> 
- * Run Custom Action -> 
- * Security keypad -> 
- * <i>the keypad device</i> -> 
- * playTone -> 
- * parameter type = string -> 
- * Tone_<i>X</i> where <i>X</i> is 1-9
+  * Create New Action -> 
+  * Set Variable, Mode or File, Run Custom Action -> 
+  * Run Custom Action -> 
+  * Security keypad -> 
+  * <i>the keypad device</i> -> 
+  * playTone -> 
+  * parameter type = string -> 
+  * Tone_<i>X</i> where <i>X</i> is 1-9
 
- They can be previewed/played with the Play Tone button on the device page.<br>
+ They can be previewed/played with the Play Tone button on the device page. 
 <br>
 <br>
 Please visit <a href='https://community.hubitat.com/t/107035' target="_blank">the community thread</a> for more information.
