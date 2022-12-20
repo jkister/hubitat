@@ -228,7 +228,7 @@ void armNightEnd() {
     }
 }
 
-void armAway(delay) {
+void armAway(delay=state.keypadConfig.armAwayDelay) {
         if (evtInt) {
     if (logEnable) log.debug "In armAway (${version()}) - delay: ${delay}"
     def sk = device.currentValue("securityKeypad")
@@ -328,7 +328,7 @@ void armAwayEnd() {
     }
 }
 
-void armHome(delay) {
+void armHome(delay=state.keypadConfig.armHomeDelay) {
         if (evtInt) {
     if (logEnable) log.debug "In armHome (${version()}) - delay: ${delay}"
     def sk = device.currentValue("securityKeypad")
